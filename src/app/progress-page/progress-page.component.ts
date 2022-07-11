@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {fromEvent, Subject, tap} from "rxjs";
 
 @Component({
@@ -7,7 +7,7 @@ import {fromEvent, Subject, tap} from "rxjs";
   styleUrls: ['./progress-page.component.scss']
 })
 export class ProgressPageComponent implements OnDestroy {
-  progressValue = 0;
+  @ViewChild('progressElement') progressElement: ElementRef<HTMLProgressElement>
   private destroy$ = new Subject<void>();
 
   constructor() {
@@ -15,7 +15,7 @@ export class ProgressPageComponent implements OnDestroy {
       tap(() => {
         const scrollPosition = window.scrollY;
         const height = document.body.scrollHeight - document.body.offsetHeight;
-        this.progressValue = (scrollPosition * 100) / height;
+        this.progressElement.nativeElement.value = (scrollPosition * 100) / height;
       })
     ).subscribe();
   }
